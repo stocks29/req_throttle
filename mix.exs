@@ -11,7 +11,11 @@ defmodule ReqThrottle.MixProject do
       package: package(),
       deps: deps(),
       source_url: "https://github.com/stocks29/req_throttle",
-      homepage_url: "https://github.com/stocks29/req_throttle"
+      homepage_url: "https://github.com/stocks29/req_throttle",
+      docs: [
+        main: "readme",
+        extras: ["README.md"]
+      ]
     ]
   end
 
