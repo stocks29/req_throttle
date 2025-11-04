@@ -7,7 +7,11 @@ defmodule ReqThrottle.MixProject do
       version: "0.1.0",
       elixir: "~> 1.18",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      description: description(),
+      package: package(),
+      deps: deps(),
+      source_url: "https://github.com/stocks29/req_throttle",
+      homepage_url: "https://github.com/stocks29/req_throttle"
     ]
   end
 
@@ -23,6 +27,20 @@ defmodule ReqThrottle.MixProject do
     [
       {:req, "~> 0.5.0"},
       {:ex_doc, "~> 0.34", only: :dev, runtime: false}
+    ]
+  end
+
+  defp description do
+    "A Req plugin for rate limiting and throttling HTTP requests to external services. " <>
+      "Provides a flexible, pluggable rate limiting solution with support for blocking and error modes."
+  end
+
+  defp package do
+    [
+      licenses: ["MIT"],
+      links: %{
+        "GitHub" => "https://github.com/stocks29/req_throttle"
+      }
     ]
   end
 end
