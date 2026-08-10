@@ -1,3 +1,9 @@
+defmodule ReqThrottle.TestAdapter do
+  def run(request) do
+    {request, %Req.Response{status: 200, body: "ok"}}
+  end
+end
+
 defmodule ReqThrottleTest do
   use ExUnit.Case
   doctest ReqThrottle
@@ -124,13 +130,7 @@ defmodule ReqThrottleTest do
 
       client = ReqThrottle.attach(request, rate_limiter: TestRateLimiter)
 
-      # Use a mock adapter to avoid actual HTTP call
-      adapter = fn req ->
-        response = %Req.Response{status: 200, body: "ok"}
-        {req, response}
-      end
-
-      {_req, resp} = Req.Request.run_request(%{client | adapter: adapter})
+      {_req, resp} = Req.Request.run_request(%{client | adapter: ReqThrottle.TestAdapter})
       assert resp.status == 200
     end
 
@@ -144,13 +144,7 @@ defmodule ReqThrottleTest do
         mode: :error
       )
 
-      # Use a mock adapter
-      adapter = fn req ->
-        response = %Req.Response{status: 200, body: "ok"}
-        {req, response}
-      end
-
-      result = Req.Request.run_request(%{client | adapter: adapter})
+      result = Req.Request.run_request(%{client | adapter: ReqThrottle.TestAdapter})
 
       assert {_req, %ReqThrottle.RateLimitError{} = error} = result
       assert error.key == "example.com"
@@ -170,13 +164,7 @@ defmodule ReqThrottleTest do
         max_retries: 3
       )
 
-      # Use a mock adapter
-      adapter = fn req ->
-        response = %Req.Response{status: 200, body: "ok"}
-        {req, response}
-      end
-
-      {_req, resp} = Req.Request.run_request(%{client | adapter: adapter})
+      {_req, resp} = Req.Request.run_request(%{client | adapter: ReqThrottle.TestAdapter})
       assert resp.status == 200
     end
 
@@ -191,13 +179,7 @@ defmodule ReqThrottleTest do
         max_retries: 2
       )
 
-      # Use a mock adapter
-      adapter = fn req ->
-        response = %Req.Response{status: 200, body: "ok"}
-        {req, response}
-      end
-
-      result = Req.Request.run_request(%{client | adapter: adapter})
+      result = Req.Request.run_request(%{client | adapter: ReqThrottle.TestAdapter})
 
       assert {_req, %ReqThrottle.RateLimitError{} = error} = result
       assert error.key == "example.com"
@@ -214,13 +196,7 @@ defmodule ReqThrottleTest do
 
       client = ReqThrottle.attach(request, rate_limiter: rate_limiter_fn)
 
-      # Use a mock adapter
-      adapter = fn req ->
-        response = %Req.Response{status: 200, body: "ok"}
-        {req, response}
-      end
-
-      {_req, resp} = Req.Request.run_request(%{client | adapter: adapter})
+      {_req, resp} = Req.Request.run_request(%{client | adapter: ReqThrottle.TestAdapter})
       assert resp.status == 200
       assert Agent.get(:call_counter, & &1) == 1
     end
@@ -231,14 +207,9 @@ defmodule ReqThrottleTest do
       # Attach with an invalid rate_limiter (string instead of atom or function)
       client = ReqThrottle.attach(request, rate_limiter: "invalid_string")
 
-      adapter = fn req ->
-        response = %Req.Response{status: 200, body: "ok"}
-        {req, response}
-      end
-
       # This should raise ArgumentError when rate_limit_hit is called
       assert_raise ArgumentError, ~r/rate_limiter must be a module atom or a function/, fn ->
-        Req.Request.run_request(%{client | adapter: adapter})
+        Req.Request.run_request(%{client | adapter: ReqThrottle.TestAdapter})
       end
     end
   end
@@ -255,12 +226,7 @@ defmodule ReqThrottleTest do
         key_generator: key_gen
       )
 
-      adapter = fn req ->
-        response = %Req.Response{status: 200, body: "ok"}
-        {req, response}
-      end
-
-      {_req, resp} = Req.Request.run_request(%{client | adapter: adapter})
+      {_req, resp} = Req.Request.run_request(%{client | adapter: ReqThrottle.TestAdapter})
       assert resp.status == 200
     end
 
@@ -275,12 +241,7 @@ defmodule ReqThrottleTest do
         key_generator: :host
       )
 
-      adapter = fn req ->
-        response = %Req.Response{status: 200, body: "ok"}
-        {req, response}
-      end
-
-      {_req, resp} = Req.Request.run_request(%{client | adapter: adapter})
+      {_req, resp} = Req.Request.run_request(%{client | adapter: ReqThrottle.TestAdapter})
       assert resp.status == 200
     end
   end
