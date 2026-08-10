@@ -20,7 +20,7 @@ Add `req_throttle` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:req_throttle, "~> 0.1.0"}
+    {:req_throttle, "~> 0.2.0"}
   ]
 end
 ```
@@ -58,7 +58,7 @@ First, add Hammer to your dependencies:
 ```elixir
 def deps do
   [
-    {:req_throttle, "~> 0.1.0"},
+    {:req_throttle, "~> 0.2.0"},
     {:hammer, "~> 7.0"}
   ]
 end
